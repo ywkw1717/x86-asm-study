@@ -1,0 +1,17 @@
+50  push eax
+51  push ecx
+52  push edx
+53  push ebx
+54  push esp
+55  push ebp
+56  push esi
+57  push edi
+
+58  pop  eax
+59  pop  ecx
+5a  pop  edx
+5b  pop  ebx
+5c  pop  esp
+5d  pop  ebp
+5e  pop  esi
+5f  pop  edi
