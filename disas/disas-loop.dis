@@ -152,30 +152,30 @@ loop:     ファイル形式 elf32-i386
 
 0804840b <main>:
  804840b:	8d 4c 24 04          	lea    ecx,[esp+0x4]
- 804840f:	83 e4 f0             	and    esp,0xfffffff0
+ 804840f:	83 e4 f0             	and    esp,0xfffffff0 # espと-16をand、つまり次の最も低位の16バイトごとの境界にスタックを配置。これは適切に配置されたアドレスにのみ作用するSIMD命令が含まれていないのであれば不要
  8048412:	ff 71 fc             	push   DWORD PTR [ecx-0x4]
- 8048415:	55                   	push   ebp
- 8048416:	89 e5                	mov    ebp,esp
+ 8048415:	55                   	push   ebp       # ebpをスタックに保存(ebpはベースレジスタとしてローカル変数を参照するのに用いられる)
+ 8048416:	89 e5                	mov    ebp,esp   # ebpにespを入れることで新たなebpにする(ebpはスタックの底、espはトップを指す)(上の１行とこの１行で、スタックフレームの生成を行っている)
  8048418:	51                   	push   ecx
- 8048419:	83 ec 14             	sub    esp,0x14
- 804841c:	c7 45 f4 00 00 00 00 	mov    DWORD PTR [ebp-0xc],0x0
- 8048423:	c7 45 f0 00 00 00 00 	mov    DWORD PTR [ebp-0x10],0x0
- 804842a:	eb 0a                	jmp    8048436 <main+0x2b>
- 804842c:	8b 45 f0             	mov    eax,DWORD PTR [ebp-0x10]
- 804842f:	01 45 f4             	add    DWORD PTR [ebp-0xc],eax
- 8048432:	83 45 f0 01          	add    DWORD PTR [ebp-0x10],0x1
- 8048436:	83 7d f0 09          	cmp    DWORD PTR [ebp-0x10],0x9
- 804843a:	7e f0                	jle    804842c <main+0x21>
- 804843c:	83 ec 08             	sub    esp,0x8
- 804843f:	ff 75 f4             	push   DWORD PTR [ebp-0xc]
+ 8048419:	83 ec 14             	sub    esp,0x14 # espから値を引き、20バイト分スタック上に確保
+ 804841c:	c7 45 f4 00 00 00 00 	mov    DWORD PTR [ebp-0xc],0x0 # num = 0
+ 8048423:	c7 45 f0 00 00 00 00 	mov    DWORD PTR [ebp-0x10],0x0 # i = 0
+ 804842a:	eb 0a                	jmp    8048436 <main+0x2b> # loop start
+ 804842c:	8b 45 f0             	mov    eax,DWORD PTR [ebp-0x10] # eax = i
+ 804842f:	01 45 f4             	add    DWORD PTR [ebp-0xc],eax # num += eax
+ 8048432:	83 45 f0 01          	add    DWORD PTR [ebp-0x10],0x1 # i += 1
+ 8048436:	83 7d f0 09          	cmp    DWORD PTR [ebp-0x10],0x9 # for(... i < 10; ...)
+ 804843a:	7e f0                	jle    804842c <main+0x21> # loop end
+ 804843c:	83 ec 08             	sub    esp,0x8 # 8バイト確保
+ 804843f:	ff 75 f4             	push   DWORD PTR [ebp-0xc] # push num
  8048442:	68 e0 84 04 08       	push   0x80484e0
- 8048447:	e8 94 fe ff ff       	call   80482e0 <printf@plt>
- 804844c:	83 c4 10             	add    esp,0x10
- 804844f:	b8 00 00 00 00       	mov    eax,0x0
+ 8048447:	e8 94 fe ff ff       	call   80482e0 <printf@plt> # printf
+ 804844c:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを開放
+ 804844f:	b8 00 00 00 00       	mov    eax,0x0 # return 0
  8048454:	8b 4d fc             	mov    ecx,DWORD PTR [ebp-0x4]
- 8048457:	c9                   	leave  
+ 8048457:	c9                   	leave  # ebpをespにコピーしてから、ebpに保存された値(push ebp?)をebpにpopすることでスタック上に確保された領域を開放
  8048458:	8d 61 fc             	lea    esp,[ecx-0x4]
- 804845b:	c3                   	ret    
+ 804845b:	c3                   	ret    # スタックから保存された命令ポインタをpopすることで、制御を呼び出したプロシージャに返す
  804845c:	66 90                	xchg   ax,ax
  804845e:	66 90                	xchg   ax,ax
 
