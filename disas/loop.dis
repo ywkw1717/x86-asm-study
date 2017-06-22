@@ -170,7 +170,7 @@ loop:     ファイル形式 elf32-i386
  804843f:	ff 75 f4             	push   DWORD PTR [ebp-0xc] # push num
  8048442:	68 e0 84 04 08       	push   0x80484e0
  8048447:	e8 94 fe ff ff       	call   80482e0 <printf@plt> # printf
- 804844c:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを開放
+ 804844c:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
  804844f:	b8 00 00 00 00       	mov    eax,0x0 # return 0
  8048454:	8b 4d fc             	mov    ecx,DWORD PTR [ebp-0x4]
  8048457:	c9                   	leave  # ebpをespにコピーしてから、ebpに保存された値(push ebp?)をebpにpopすることでスタック上に確保された領域を開放
