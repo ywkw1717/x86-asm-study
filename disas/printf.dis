@@ -154,15 +154,15 @@ printf:     ファイル形式 elf32-i386
  804840b:	8d 4c 24 04          	lea    ecx,[esp+0x4]
  804840f:	83 e4 f0             	and    esp,0xfffffff0
  8048412:	ff 71 fc             	push   DWORD PTR [ecx-0x4]
- 8048415:	55                   	push   ebp
- 8048416:	89 e5                	mov    ebp,esp
+ 8048415:	55                   	push   ebp # スタックフレーム
+ 8048416:	89 e5                	mov    ebp,esp # の生成
  8048418:	51                   	push   ecx
- 8048419:	83 ec 04             	sub    esp,0x4
- 804841c:	83 ec 0c             	sub    esp,0xc
- 804841f:	68 c0 84 04 08       	push   0x80484c0
- 8048424:	e8 b7 fe ff ff       	call   80482e0 <puts@plt>
- 8048429:	83 c4 10             	add    esp,0x10
- 804842c:	b8 00 00 00 00       	mov    eax,0x0
+ 8048419:	83 ec 04             	sub    esp,0x4 # スタックを確保
+ 804841c:	83 ec 0c             	sub    esp,0xc # 引数分の？スタックを確保
+ 804841f:	68 c0 84 04 08       	push   0x80484c0 # "hoge\n"
+ 8048424:	e8 b7 fe ff ff       	call   80482e0 <puts@plt> # printf("hoge\n")
+ 8048429:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
+ 804842c:	b8 00 00 00 00       	mov    eax,0x0 # return 0
  8048431:	8b 4d fc             	mov    ecx,DWORD PTR [ebp-0x4]
  8048434:	c9                   	leave  
  8048435:	8d 61 fc             	lea    esp,[ecx-0x4]
