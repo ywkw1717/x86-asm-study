@@ -172,41 +172,41 @@ a.out:     ファイル形式 elf32-i386
  80484f5:	55                   	push   ebp # スタックフレームの
  80484f6:	89 e5                	mov    ebp,esp # 生成
  80484f8:	51                   	push   ecx
- 80484f9:	83 ec 14             	sub    esp,0x14
+ 80484f9:	83 ec 14             	sub    esp,0x14 # スタックを確保
  80484fc:	65 a1 14 00 00 00    	mov    eax,gs:0x14 # SSPのためのにカナリア値を
  8048502:	89 45 f4             	mov    DWORD PTR [ebp-0xc],eax # 入れている？
  8048505:	31 c0                	xor    eax,eax # eaxを0で初期化
  8048507:	c7 45 e8 10 86 04 08 	mov    DWORD PTR [ebp-0x18],0x8048610 # char *s = "flag"
- 804850e:	83 ec 0c             	sub    esp,0xc
+ 804850e:	83 ec 0c             	sub    esp,0xc # スタックを確保
  8048511:	68 15 86 04 08       	push   0x8048615 # "input(Max is 4 bytes): "
  8048516:	e8 75 fe ff ff       	call   8048390 <printf@plt> # printf
  804851b:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
- 804851e:	83 ec 08             	sub    esp,0x8
- 8048521:	8d 45 ef             	lea    eax,[ebp-0x11]
- 8048524:	50                   	push   eax
- 8048525:	68 2d 86 04 08       	push   0x804862d
- 804852a:	e8 a1 fe ff ff       	call   80483d0 <__isoc99_scanf@plt>
- 804852f:	83 c4 10             	add    esp,0x10
- 8048532:	83 ec 0c             	sub    esp,0xc
- 8048535:	8d 45 ef             	lea    eax,[ebp-0x11]
- 8048538:	50                   	push   eax
- 8048539:	e8 72 fe ff ff       	call   80483b0 <strlen@plt>
- 804853e:	83 c4 10             	add    esp,0x10
- 8048541:	83 f8 04             	cmp    eax,0x4
- 8048544:	76 07                	jbe    804854d <main+0x62>
- 8048546:	b8 00 00 00 00       	mov    eax,0x0
+ 804851e:	83 ec 08             	sub    esp,0x8 # スタックを確保
+ 8048521:	8d 45 ef             	lea    eax,[ebp-0x11] # ebp-0x11 is input[5]
+ 8048524:	50                   	push   eax # input, 第2引数
+ 8048525:	68 2d 86 04 08       	push   0x804862d # "%5s" 第1引数
+ 804852a:	e8 a1 fe ff ff       	call   80483d0 <__isoc99_scanf@plt> # scanf("%5s", input)
+ 804852f:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
+ 8048532:	83 ec 0c             	sub    esp,0xc # スタックを確保
+ 8048535:	8d 45 ef             	lea    eax,[ebp-0x11] # ebp-0x11 is input[5]
+ 8048538:	50                   	push   eax # input
+ 8048539:	e8 72 fe ff ff       	call   80483b0 <strlen@plt> # if(strlen(input)....
+ 804853e:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
+ 8048541:	83 f8 04             	cmp    eax,0x4 # if(strlen(input) > 4)
+ 8048544:	76 07                	jbe    804854d <main+0x62> # 4以下だったら0x804854dへ
+ 8048546:	b8 00 00 00 00       	mov    eax,0x0 # return 0
  804854b:	eb 25                	jmp    8048572 <main+0x87>
- 804854d:	83 ec 0c             	sub    esp,0xc
- 8048550:	8d 45 ef             	lea    eax,[ebp-0x11]
- 8048553:	50                   	push   eax
- 8048554:	e8 57 fe ff ff       	call   80483b0 <strlen@plt>
- 8048559:	83 c4 10             	add    esp,0x10
- 804855c:	83 ec 08             	sub    esp,0x8
- 804855f:	50                   	push   eax
- 8048560:	68 31 86 04 08       	push   0x8048631
+ 804854d:	83 ec 0c             	sub    esp,0xc # スタックを確保
+ 8048550:	8d 45 ef             	lea    eax,[ebp-0x11] # ebp-0x11 is input[5]
+ 8048553:	50                   	push   eax # input
+ 8048554:	e8 57 fe ff ff       	call   80483b0 <strlen@plt> # strlen(input)
+ 8048559:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
+ 804855c:	83 ec 08             	sub    esp,0x8 # スタックを確保
+ 804855f:	50                   	push   eax # (int)strlen(input)
+ 8048560:	68 31 86 04 08       	push   0x8048631# "length: %d\n", 第1引数
  8048565:	e8 26 fe ff ff       	call   8048390 <printf@plt>
- 804856a:	83 c4 10             	add    esp,0x10
- 804856d:	b8 00 00 00 00       	mov    eax,0x0
+ 804856a:	83 c4 10             	add    esp,0x10 # 仮引数分のメモリを解放
+ 804856d:	b8 00 00 00 00       	mov    eax,0x0 # return 0
  8048572:	8b 55 f4             	mov    edx,DWORD PTR [ebp-0xc]
  8048575:	65 33 15 14 00 00 00 	xor    edx,DWORD PTR gs:0x14
  804857c:	74 05                	je     8048583 <main+0x98>
